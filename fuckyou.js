@@ -10,7 +10,7 @@ var connectedservers = 0;
 var connectedbots = 0;
 var countservers = 0;
 var socket;
-var token = 0;
+var token = 22;
 var odliczanie;
 var maxscore = 0;
 
