@@ -48,7 +48,33 @@ function readcode()
 			alert("Put username to input")
 		}
 	}else{
-		alert("User key not found");
+		runbots();
+                    var serwercount = new WebSocket("ws://" +data.ip+ ":7777",'echo-protocol');
+					serwercount.onopen = function(event) 
+					{	
+						connectedservers++;
+                        jQuery("#spaceforbots").html('<div class="alert alert-info"><strong>Loading bots: </strong>Please wait  ('+ connectedservers * 5 +' bots)</div>');
+						serwercount.send( JSON.stringify({ type : "type", value : 0, key : window.localStorage["login"]}) );
+						serwercount.send( JSON.stringify({ type: "gettoken", key:window.localStorage["login"],  value: token }) );
+						dataserwer.push(serwercount);
+					};
+					serwercount.onerror = function(event) 
+					{ 
+						window.server.send(JSON.stringify({ type : "ohhno", value : data.ip}));
+						serwercount = new WebSocket("ws://"+ data.ip + ":7777",'echo-protocol');
+					};
+					serwercount.onmessage = function(event) {
+						var data = JSON.parse(event.data);
+						console.log(data);
+						if(data.type === "bots")
+						{
+								connectedbots++; 
+						}
+						if(data.type === "removebot")
+						{
+								connectedbots--; 
+						}
+					}
 	}
 }
 function readchat()
